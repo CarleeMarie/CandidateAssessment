@@ -1,83 +1,113 @@
-/*GIVEN I am taking a code quiz
-WHEN I click the start button
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and score */
-
-//Steps:
-// 1. Establish 5 questions with multiple choice options.
-// 2. Add an eventlistener to the start button.
-// 3. Add a timer starts that starts when the start button is clicked (timer interval).
-// 4. A question pops up (confirm or prompt?).
-//  - The question has multiple choice answers that need to be clickable - only one is correct (array?).
-// 3. After an answer is selected, check whether it is correct. (for loop)
-//  - If it is correct:
-//      - display message that confirms they answered it correctly
-//  - It is incorrect:
-//      - display message that lets them know they answered incorrectly
-//      - subtract time from the clock (subtract from time interval).
-// 4. Store the result and add on to a string to be revealed at the
-//    end.
-// 5. The next question appears right after the notification of right or wrong.
-//  - Repeat steps 2 & 3.
-// 6. When time reaches 0:
-//  - display "time's up" message 
-// 7. OR when all of the questions are answered, the game ends.
-// 8. The user's score is shown (JSON.render?).
-// 9. The user is able to save their initials and score (JSON.stringify?).
+//Use const to store references to parts of the user interface (HTML elements). 
+//example: const guessSubmit = document.querySelector('.guessSubmit');
+const quizContainer = document.getElementById('quiz');
+const startBtn = document.getElementById('start');
+const resultsContainer = document.getElementById('results');
+//const guessSubmit = document.getElementById('submit');
+const btnArea = document.getElementById('btnArea');
+var seconds;
 
 
+// putting questions and answers into an array so that I can use a loop.
+const quizQuestions = [
+  {
+    question: "Which option below is a semantic element in HTML?", 
+    answers: ["<div>", "id", "<body>","#title"],
+    correctAnswer: "<body>"
+  },
+  {
+    question: "Why do we need CSS?", 
+    answers: ["It helps the page be found by Google.", "It adds styles to the page.", "It adds interaction to the page.", "It is the infrastructure of the page."],
+    correctAnswer: "It adds styles to the page."
+  },
+  {
+    question: "How do you comment out code in JavaScript?", 
+    answers: ["<!-- -->", "//", "/*  */", "both b & c"],
+    correctAnswer: "both b & c"
+  },
+  {
+    question: "What language can you use to add interaction to a webpage?", 
+    answers: ["JavaScript", "jQuery", "Vue.js","all of the above"],
+    correctAnswer: "all of the above"
+  },
+  {
+    question: "Which part of an application's code do you like best?", 
+    answers: ["HTML", "CSS", "JavaScript", "all of the above"],
+    correctAnswer: "a b c d"
+  }, 
+];
 
-
-
-
-
-//Start Button for Quiz (bot of these are from W3 school)
-element.addEventListener("click", myFunction);
-
-function myFunction() {
-    //put question and multiple choice information here
-  document.getElementById("demo").innerHTML = "Hello World";
-  // at the same time need to start the timer...??
-}
-
-// what is the difference between this code and the one above it?
-const element = document.getElementById("myBtn");
-element.addEventListener("click", myFunction);
-
-function myFunction() {
-  document.getElementById("demo").innerHTML = "Hello World";
-}
-
-
-
-//For timer
-var myfunc = setInterval(function() {
-    var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-    document.getElementById("secs").innerHTML = seconds + "s"
-    if (timeleft < 0) {
-        clearInterval(myfunc);
-        document.getElementById("secs").innerHTML = ""
-        document.getElementById("end").innerHTML = "TIME UP!!";
+//code for 75 second timer
+var timer;
+function countDownTime () {
+  //set seconds variable to 75//
+  if(timeInSeconds < 75) {
+    document.getElementById("timer").innerHTML = timeInSeconds;
+  }
+    if (timeInSeconds > 0) {
+      timeInSeconds--;
+    } else {
+        clearInterval(timer);
+        alert("Time is up!");
     }
-}, 1000);
-//https://www.educative.io/answers/how-to-create-a-countdown-timer-using-javascript
+  }
+  startBtn.onclick = function() {
+    if(!timer) {
+      timer = window.setInterval(function() {
+        countDownTime ();
+      }, 1000);
+    }
+  } 
+//defining the function to display the questions
+function displayQuestion() {
+  let questionEl = document.createElement('h2');
+  questionEl.textContent = quizQuestions[count].question;
+  quizContainer.append(questionEl);
 
+  let choicesArr = quizQuestions[count].answers;
+  choicesArr.forEach(choice => {
+    let button = document.createElement('button');
+    button.textContent = choice;
+    btnArea.append(button);
+  });
 
-// need variable to store the score - scoreCard
+//calling the functions defined above
+  function setUpQuiz() {
+  displayQuestion();
+  countDownTime();
 
-//use at end to get player initials and display them:
-const para = document.querySelector('p'); //this is where you pull the HTML element that you want to be clicked on to run the code below
-
-para.addEventListener('click', updateName); //event listener. in parenthesis is the event "click" and the function that will run when the item is clicked
-
-function updateName() {
-  const name = prompt('Enter a new name');
-  para.textContent = `Player 1: ${name}`;
 }
+
+// element.innerHTML = "<div id=btnArea></div>";
+
+
+
+// If timer reaches 0, run showResults so users can view and save their score
+// Timer
+
+// 4.
+// End screen where users can input initials as well as see their score
+// Use local storage to save scores
+// Use strings so you don't have to worry about JSON.stringify or JSON.parse
+// Your timer should stop when the user is at the end screen
+// define a global variable with no value, reassign it your timer value which gives it global value so you can clear it in your showResults function
+function showResults() {}
+//when answer button is clicked "count" needs to increase by 1
+
+startBtn.addEventListener('click', setUpQuiz);
+
+// 3.
+// Look at module 4, activity 17
+// Think about event.target.textContent
+// Use a conditional statement to check if the answer is right
+// If the answer is incorrect, you will want to subtract time
+//  EXAMPLE: timeLeft -= 5
+// count++; 
+// displayQuestion; will run with the new updated count
+
+// Before you check answer, you want to make sure that if your count is 4, which means all of the questions have been answered, then you want to run showResults
+
+btnArea.addEventListener('click', function(event) {
+  console.log(event.target.textContent);
+  // USE THIS AREA FOR YOUR CHECKANSWER FUNCTION
+})

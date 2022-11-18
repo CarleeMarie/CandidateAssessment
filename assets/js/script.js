@@ -37,6 +37,10 @@ const quizQuestions = [
   }, 
 ];
 
+
+function checkAnswers() {
+
+}
 //code for 75 second timer
 var timer;
 function countDownTime () {
@@ -46,7 +50,7 @@ function countDownTime () {
   }
     if (timeInSeconds > 0) {
       timeInSeconds--;
-    } else {
+    } else if (timeInSeconds === 0) {
         clearInterval(timer);
         alert("Time is up!");
     }
@@ -75,7 +79,6 @@ function displayQuestion() {
   function setUpQuiz() {
   displayQuestion();
   countDownTime();
-
 }
 
 // element.innerHTML = "<div id=btnArea></div>";
@@ -110,4 +113,4 @@ startBtn.addEventListener('click', setUpQuiz);
 btnArea.addEventListener('click', function(event) {
   console.log(event.target.textContent);
   // USE THIS AREA FOR YOUR CHECKANSWER FUNCTION
-})
+} )
